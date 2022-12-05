@@ -1,6 +1,6 @@
 var abc = document.getElementById('abc')
 var city = document.getElementById('city');
-
+var loaders = document.getElementById("Loader")
 var date = new Date();
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -9,10 +9,10 @@ var currentMonth = month[date.getMonth()]
 var todayDate = date.getDate();
 var wImg = document.getElementById('wImg')
 
-function fetchDataOnload() {
+async function fetchDataOnload() {
     let lat;
     let lon;
-    if (navigator.geolocation) {
+    if (await navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
             lat = position.coords.latitude;
             lon = position.coords.longitude;
@@ -21,6 +21,7 @@ function fetchDataOnload() {
                     return response.json();
                 })
                 .then(data1 => {
+                   
                     console.log(wImg)
                     abc.innerHTML = `
                     <h4>${data1.name}<br>${data1.sys.country}</h4>
@@ -60,7 +61,9 @@ function fetchDataOnload() {
                         data1.weather[0].icon = "assests/img/cloudy.png";
 
                     }
+
                     abc.innerHTML += `
+
                     <div class="weather_temp">
                     <div class="weather_img">
                     <img id ="wImg" src="${data1.weather[0].icon}"></div>
@@ -114,14 +117,14 @@ function fetchDataOnload() {
 window.onload = fetchDataOnload();
 
 
-function onSearch() {
+async function onSearch() {
 
     if (city.value.trim() === "") {
         swal(`Enter a city name Karachi,Delhi etc`);
     }
 
     else {
-        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=metric&appid=233a720fcff7e4f27d62707870344016`)
+        await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=metric&appid=233a720fcff7e4f27d62707870344016`)
             .then(response => {
                 return response.json();
             })
@@ -233,59 +236,59 @@ function onSearch() {
 
 
 
-window.onkeydown = function KeyonSearch(){
-    if(event.keyCode==13){
-    if (city.value.trim() === "") {
-        swal(`Enter a city name Karachi,Delhi etc`);
-    }
+window.onkeydown = function KeyonSearch() {
+    if (event.keyCode == 13) {
+        if (city.value.trim() === "") {
+            swal(`Enter a city name Karachi,Delhi etc`);
+        }
 
-    else {
-        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=metric&appid=233a720fcff7e4f27d62707870344016`)
-            .then(response => {
-                return response.json();
-            })
-            .then(data2 => {
-                console.log(wImg)
-                abc.innerHTML = `
+        else {
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=metric&appid=233a720fcff7e4f27d62707870344016`)
+                .then(response => {
+                    return response.json();
+                })
+                .then(data2 => {
+                    console.log(wImg)
+                    abc.innerHTML = `
                 <h4>${data2.name}<br>${data2.sys.country}</h4>
                 <p class="date">${today.slice(0, 3)}, ${currentMonth} ${todayDate}</p>`
 
-                // Atmoshphere 
-                if (data2.weather[0].id == 701 || data2.weather[0].id == 741) {
-                    data2.weather[0].icon = "assests/img/mist.png";
-                }
-                else if (data2.weather[0].id == 711) {
-                    data2.weather[0].icon = "assests/img/smoke.png";
-                }
-                else if (data2.weather[0].id == 721) {
-                    data2.weather[0].icon = "assests/img/haze.png";
-                }
-                else if (data2.weather[0].id == 731) {
-                    data2.weather[0].icon = "assests/img/dust.png";
-                }
-                else if (data2.weather[0].id == 751 || data2.weather[0].id == 761 || data2.weather[0].id == 762 || data2.weather[0].id == 771 || data2.weather[0].id == 781) {
-                    data2.weather[0].icon = "assests/img/sand.png";
-                }
-                else if (data2.weather[0].id == 531 || data2.weather[0].id == 522 || data2.weather[0].id == 521 || data2.weather[0].id == 520 || data2.weather[0].id == 511 || data2.weather[0].id == 504 || data2.weather[0].id == 503 || data2.weather[0].id == 502 || data2.weather[0].id == 501 || data2.weather[0].id == 500) {
-                    data2.weather[0].icon = "assests/img/rain.png";
-                }
-                else if (data2.weather[0].id == 801 || data2.weather[0].id == 802 || data2.weather[0].id == 803 || data2.weather[0].id == 804) {
-                    data2.weather[0].icon = "assests/img/clouds.png";
-                }
-                else if (data2.weather[0].id == 600 || data2.weather[0].id == 601 || data2.weather[0].id == 602 || data2.weather[0].id == 611 || data2.weather[0].id == 612 || data2.weather[0].id == 613 || data2.weather[0].id == 615 || data2.weather[0].id == 616 || data2.weather[0].id == 620 || data2.weather[0].id == 621 || data2.weather[0].id == 622) {
-                    data2.weather[0].icon = "assests/img/snow.png";
-                }
-                else if (data2.weather[0].id == 300 || data2.weather[0].id == 301 || data2.weather[0].id == 302 || data2.weather[0].id == 310 || data2.weather[0].id == 311 || data2.weather[0].id == 312 || data2.weather[0].id == 313 || data2.weather[0].id == 314 || data2.weather[0].id == 321) {
-                    data2.weather[0].icon = "assests/img/snow.png";
-                }
-                else if (data2.weather[0].id == 200 || data2.weather[0].id == 201 || data2.weather[0].id == 202 || data2.weather[0].id == 210 || data2.weather[0].id == 211 || data2.weather[0].id == 212 || data2.weather[0].id == 213 || data2.weather[0].id == 214 || data2.weather[0].id == 221 || data2.weather[0].id == 230 || data2.weather[0].id == 231 || data2.weather[0].id == 232) {
-                    data2.weather[0].icon = "assests/img/scattered-thunderstorms.png";
-                }
-                else if (data2.weather[0].id == 800) {
-                    data2.weather[0].icon = "assests/img/cloudy.png";
+                    // Atmoshphere 
+                    if (data2.weather[0].id == 701 || data2.weather[0].id == 741) {
+                        data2.weather[0].icon = "assests/img/mist.png";
+                    }
+                    else if (data2.weather[0].id == 711) {
+                        data2.weather[0].icon = "assests/img/smoke.png";
+                    }
+                    else if (data2.weather[0].id == 721) {
+                        data2.weather[0].icon = "assests/img/haze.png";
+                    }
+                    else if (data2.weather[0].id == 731) {
+                        data2.weather[0].icon = "assests/img/dust.png";
+                    }
+                    else if (data2.weather[0].id == 751 || data2.weather[0].id == 761 || data2.weather[0].id == 762 || data2.weather[0].id == 771 || data2.weather[0].id == 781) {
+                        data2.weather[0].icon = "assests/img/sand.png";
+                    }
+                    else if (data2.weather[0].id == 531 || data2.weather[0].id == 522 || data2.weather[0].id == 521 || data2.weather[0].id == 520 || data2.weather[0].id == 511 || data2.weather[0].id == 504 || data2.weather[0].id == 503 || data2.weather[0].id == 502 || data2.weather[0].id == 501 || data2.weather[0].id == 500) {
+                        data2.weather[0].icon = "assests/img/rain.png";
+                    }
+                    else if (data2.weather[0].id == 801 || data2.weather[0].id == 802 || data2.weather[0].id == 803 || data2.weather[0].id == 804) {
+                        data2.weather[0].icon = "assests/img/clouds.png";
+                    }
+                    else if (data2.weather[0].id == 600 || data2.weather[0].id == 601 || data2.weather[0].id == 602 || data2.weather[0].id == 611 || data2.weather[0].id == 612 || data2.weather[0].id == 613 || data2.weather[0].id == 615 || data2.weather[0].id == 616 || data2.weather[0].id == 620 || data2.weather[0].id == 621 || data2.weather[0].id == 622) {
+                        data2.weather[0].icon = "assests/img/snow.png";
+                    }
+                    else if (data2.weather[0].id == 300 || data2.weather[0].id == 301 || data2.weather[0].id == 302 || data2.weather[0].id == 310 || data2.weather[0].id == 311 || data2.weather[0].id == 312 || data2.weather[0].id == 313 || data2.weather[0].id == 314 || data2.weather[0].id == 321) {
+                        data2.weather[0].icon = "assests/img/snow.png";
+                    }
+                    else if (data2.weather[0].id == 200 || data2.weather[0].id == 201 || data2.weather[0].id == 202 || data2.weather[0].id == 210 || data2.weather[0].id == 211 || data2.weather[0].id == 212 || data2.weather[0].id == 213 || data2.weather[0].id == 214 || data2.weather[0].id == 221 || data2.weather[0].id == 230 || data2.weather[0].id == 231 || data2.weather[0].id == 232) {
+                        data2.weather[0].icon = "assests/img/scattered-thunderstorms.png";
+                    }
+                    else if (data2.weather[0].id == 800) {
+                        data2.weather[0].icon = "assests/img/cloudy.png";
 
-                }
-                abc.innerHTML += `
+                    }
+                    abc.innerHTML += `
                 <div class="weather_temp">
                 <div class="weather_img">
                 <img id ="wImg" src="${data2.weather[0].icon}"></div>
@@ -325,28 +328,28 @@ window.onkeydown = function KeyonSearch(){
                 </div>
                 </div>
               `
-                if (data2.message === "city not found") {
+                    if (data2.message === "city not found") {
+                        swal({
+                            title: "Error",
+                            text: "City not found",
+                            icon: "error",
+                            button: "Ok!",
+                        });
+                        abc.innerHTML = `
+                    <h4>City Not Found</h4>
+                  `
+                        //
+                    }
+                })
+                .catch(error2 => {
                     swal({
                         title: "Error",
                         text: "City not found",
                         icon: "error",
                         button: "Ok!",
                     });
-                    abc.innerHTML = `
-                    <h4>City Not Found</h4>
-                  `
-                    //
-                }
-            })
-            .catch(error2 => {
-                swal({
-                    title: "Error",
-                    text: "City not found",
-                    icon: "error",
-                    button: "Ok!",
-                });
-            })
+                })
+        }
     }
-}
 }
 
